@@ -39,29 +39,33 @@ diet = st.sidebar.selectbox(
     "🥗 Diet type",
     ["Vegetarian", "Mixed", "Non-Vegetarian"]
 )
-location = st.selectbox(
+
+location = st.sidebar.selectbox(
     "📍 Select your location",
     ["Urban (City)", "Semi-Urban", "Rural", "Coastal", "Hilly"]
 )
 
-# ---------- MAIN ACTION ----------
 st.divider()
 
+# ---------- MAIN ----------
 st.subheader("📊 Climate Impact Analysis")
-st.subheader("📍 Your Location")
-
-location = st.selectbox(
-    "Select your region",
-    ["Urban City", "Coastal Area", "Mountain Region", "Hot Climate", "Cold Climate"]
-)
 
 if st.button("🌱 Analyze My Climate Impact"):
 
-    # Carbon calculations
+    # ---------- CALCULATIONS ----------
     driving_emission = km_driven * 0.21
     ac_emission = ac_hours * 1.5
-    total_carbon = driving_emission + ac_emission
 
+    if diet == "Non-Vegetarian":
+        diet_emission = 2
+    elif diet == "Mixed":
+        diet_emission = 1
+    else:
+        diet_emission = 0
+
+    total_carbon = driving_emission + ac_emission + diet_emission
+
+    # ---------- METRICS ----------
     st.subheader("🌍 Carbon Footprint Breakdown")
 
     col1, col2, col3 = st.columns(3)
@@ -74,59 +78,8 @@ if st.button("🌱 Analyze My Climate Impact"):
 
     with col3:
         st.metric("🌱 Total", f"{total_carbon:.2f} kg CO₂")
-   
-    st.subheader("🌱 Personalized Climate Tips")
 
-if location == "Urban City":
-    st.info("🚲 Use public transport or cycle for short distances. Urban emissions are transport-heavy.")
-
-elif location == "Coastal Area":
-    st.info("🌊 Reduce plastic use and save energy — coastal regions are vulnerable to climate change.")
-
-elif location == "Mountain Region":
-    st.info("🏔️ Use clean heating methods and avoid deforestation to protect fragile ecosystems.")
-
-elif location == "Hot Climate":
-    st.info("☀️ Use energy-efficient ACs and maximize natural ventilation.")
-
-elif location == "Cold Climate":
-    st.info("❄️ Insulate homes properly to reduce heating emissions.")
-
-    carbon = (km_driven * 0.21) + (ac_hours * 1.5)
-
-    st.subheader("🔁 What If You Reduce Your Impact?")
-
-    reduced_km = km_driven * 0.7      # 30% less driving
-    reduced_ac = ac_hours * 0.8       # 20% less AC use
-
-    reduced_carbon = (reduced_km * 0.21) + (reduced_ac * 1.5)
-
-    savings = carbon - reduced_carbon
-
-    st.write(f"🌍 **Current footprint:** {carbon:.2f} kg CO₂/day")
-    st.write(f"🌱 **After small changes:** {reduced_carbon:.2f} kg CO₂/day")
-
-    st.success(f"💚 You could save **{savings:.2f} kg CO₂ per day**")
-    st.success("✅ Analysis Complete")
-
-    st.metric(
-        label="🌎 Estimated Daily Carbon Footprint",
-        value=f"{carbon:.2f} kg CO₂/day"
-    )
-
-    # ---------- CARBON BREAKDOWN ----------
-    st.subheader("📈 Carbon Footprint Breakdown")
-
-    driving_emission = km_driven * 0.21
-    ac_emission = ac_hours * 1.5
-
-    if diet == "Non-Vegetarian":
-        diet_emission = 2
-    elif diet == "Mixed":
-        diet_emission = 1
-    else:
-        diet_emission = 0
-
+    # ---------- BAR CHART ----------
     chart_data = {
         "Source": ["Driving", "AC Usage", "Diet"],
         "kg CO₂/day": [driving_emission, ac_emission, diet_emission]
@@ -134,38 +87,49 @@ elif location == "Cold Climate":
 
     st.bar_chart(chart_data, x="Source", y="kg CO₂/day")
 
-    st.divider()
+    # ---------- LOCATION-BASED CLIMATE TIPS ----------
+    st.subheader("📍 Location-Based Climate Tips")
 
+    if location == "Urban (City)":
+        st.info("🚇 Use public transport, carpooling, or cycling to reduce traffic emissions.")
+        st.info("🌱 Install energy-efficient appliances and rooftop solar panels.")
+
+    elif location == "Semi-Urban":
+        st.info("🚲 Prefer bicycles or shared transport for short distances.")
+        st.info("💡 Switch to LED lighting and energy-efficient fans.")
+
+    elif location == "Rural":
+        st.info("🌾 Avoid burning crop residue; compost organic waste.")
+        st.info("🌳 Plant native trees and use solar-powered pumps.")
+
+    elif location == "Coastal":
+        st.info("🌊 Reduce plastic usage to protect marine life.")
+        st.info("🌬️ Use natural ventilation to minimize AC consumption.")
+
+    elif location == "Hilly":
+        st.info("🏔️ Improve insulation to reduce heating needs.")
+        st.info("🔥 Use clean heating methods and avoid deforestation.")
+
+    # ---------- PERSONALIZED SUGGESTIONS ----------
     st.subheader("💡 Personalized Recommendations")
-st.markdown("### 📍 Location-Based Climate Tips")
-
-if location == "Urban (City)":
-    st.write("🚇 Prefer metro, buses, or carpooling to reduce traffic emissions.")
-    st.write("🌱 Use energy-efficient appliances and rooftop solar if possible.")
-
-elif location == "Semi-Urban":
-    st.write("🚲 Use bicycles or shared transport for short distances.")
-    st.write("💡 Switch to LED lighting to save electricity.")
-
-elif location == "Rural":
-    st.write("🌾 Use solar pumps and avoid burning crop waste.")
-    st.write("🌳 Plant native trees around homes and farms.")
-
-elif location == "Coastal":
-    st.write("🌊 Conserve water and avoid plastic waste near beaches.")
-    st.write("🌬️ Use natural ventilation to reduce AC usage.")
-
-elif location == "Hilly":
-    st.write("🏔️ Insulate homes properly to reduce heating needs.")
-    st.write("🚶 Prefer walking for short distances on slopes.")
 
     if km_driven > 10:
-        st.write("🚍 Try public transport or carpool at least 2 days a week.")
+        st.write("🚍 Try reducing driving by carpooling at least twice a week.")
 
     if ac_hours > 5:
-        st.write("❄️ Reduce AC usage by 1 hour per day to save energy.")
+        st.write("❄️ Reduce AC usage by 1 hour daily to save energy.")
 
     if diet == "Non-Vegetarian":
-        st.write("🥦 Try adding more plant-based meals to your diet.")
+        st.write("🥦 Try adding more plant-based meals to lower your carbon footprint.")
 
-    st.info("Small daily changes create a big climate impact 🌱")
+    # ---------- IMPACT REDUCTION ----------
+    st.subheader("🔁 What If You Reduce Your Impact?")
+
+    reduced_km = km_driven * 0.7
+    reduced_ac = ac_hours * 0.8
+    reduced_carbon = (reduced_km * 0.21) + (reduced_ac * 1.5) + diet_emission
+
+    savings = total_carbon - reduced_carbon
+
+    st.success(f"🌱 You could reduce **{savings:.2f} kg CO₂ per day** with small changes.")
+    st.success("✅ Analysis Complete")

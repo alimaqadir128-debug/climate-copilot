@@ -1,4 +1,10 @@
 # 🌍 Climate Copilot
+---
+title: Climate Copilot
+sdk: streamlit
+app_file: app.py
+---
+
 
 Climate Copilot is a beginner-friendly **climate awareness & sustainability web app** built as a prototype for hackathons and learning purposes. It provides **location-based climate tips**, simple explanations, and an interactive UI to help users understand how climate change affects different regions.
 
