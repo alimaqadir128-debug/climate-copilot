@@ -1,4 +1,9 @@
 # 🌍 Climate Copilot
+## 🌍 Live Demo
+🔗 https://climate-copilot-1.onrender.com
+
+> Note: The app may take 1–2 minutes to load on first open because it runs on a free cloud server.
+
 ---
 title: Climate Copilot
 sdk: streamlit
